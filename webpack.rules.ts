@@ -19,10 +19,6 @@ export const rules: Required<ModuleOptions>["rules"] = [
     },
   },
   {
-    test: /\.vue$/,
-    use: "vue-loader",
-  },
-  {
     test: /\.tsx?$/,
     exclude: /(node_modules|\.webpack)/,
     use: {

@@ -1,6 +1,6 @@
 {
-  "name": "my-home-desktop",
-  "productName": "my-home-desktop",
+  "name": "electron-vue-webpack-template",
+  "productName": "electron-vue-webpack-template",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
@@ -36,8 +36,10 @@
     "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.32.0",
     "fork-ts-checker-webpack-plugin": "^7.3.0",
+    "mini-css-extract-plugin": "^2.9.4",
     "node-loader": "^2.1.0",
-    "style-loader": "^3.3.4",
+    "sass": "^1.93.2",
+    "sass-loader": "^16.0.5",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
     "vue-loader": "^17.3.1"
