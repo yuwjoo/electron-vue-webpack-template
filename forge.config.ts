@@ -10,6 +10,7 @@ import { FuseV1Options, FuseVersion } from "@electron/fuses";
 
 import { mainConfig } from "./webpack.main.config";
 import { rendererConfig } from "./webpack.renderer.config";
+import { builderConfig } from "./builder.config";
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -30,16 +31,15 @@ const config: ForgeConfig = {
         config: rendererConfig,
         entryPoints: [
           {
+            name: builderConfig.mainWindowName,
             html: "./src/index.html",
             js: "./src/renderer.ts",
-            name: "main_window",
             preload: {
               js: "./src/preload.ts",
             },
           },
         ],
       },
-      port: 3000, // web端口
     }),
     // Fuses are used to enable/disable various Electron functionality
     // at package time, before code signing the application

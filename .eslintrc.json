@@ -12,5 +12,25 @@
     "plugin:import/electron",
     "plugin:import/typescript"
   ],
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          [
+            "@",
+            "./src"
+          ]
+        ],
+        "extensions": [
+          ".vue",
+          ".js",
+          ".ts",
+          ".tsx",
+          ".jsx",
+          ".json"
+        ]
+      }
+    }
+  }
 }
