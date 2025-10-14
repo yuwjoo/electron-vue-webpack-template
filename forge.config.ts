@@ -7,10 +7,13 @@ import { AutoUnpackNativesPlugin } from "@electron-forge/plugin-auto-unpack-nati
 import { WebpackPlugin } from "@electron-forge/plugin-webpack";
 import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
+import dotenv from "dotenv";
+import fs from "fs";
 
 import { mainConfig } from "./webpack.main.config";
 import { rendererConfig } from "./webpack.renderer.config";
-import { builderConfig } from "./builder.config";
+
+const env = dotenv.parse(fs.readFileSync("./.env"));
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -31,7 +34,7 @@ const config: ForgeConfig = {
         config: rendererConfig,
         entryPoints: [
           {
-            name: builderConfig.mainWindowName,
+            name: env.MAIN_WINDOW_NAME,
             html: "./src/index.html",
             js: "./src/renderer.ts",
             preload: {

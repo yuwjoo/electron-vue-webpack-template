@@ -34,6 +34,7 @@
     "@vue/compiler-sfc": "^3.5.22",
     "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^6.11.0",
+    "dotenv": "^17.2.3",
     "dotenv-webpack": "^8.1.1",
     "electron": "38.2.2",
     "eslint": "^8.57.1",

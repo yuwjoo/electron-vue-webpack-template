@@ -1,4 +1,4 @@
-import type { Configuration } from "webpack";
+import { DefinePlugin, type Configuration } from "webpack";
 
 import { rules } from "./webpack.rules";
 import { plugins } from "./webpack.plugins";
@@ -52,6 +52,11 @@ export const rendererConfig: Configuration = {
     new MiniCssExtractPlugin(),
     new CopyPlugin({
       patterns: [{ from: "public", to: "static" }],
+    }),
+    new DefinePlugin({
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false,
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
     }),
   ],
   resolve: {

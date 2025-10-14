@@ -7,32 +7,27 @@ const rendererDir = path.resolve(__dirname, "..", "renderer"); // 渲染进程�
 let mainWindow: BrowserWindow | null = null; // 主窗口对象
 
 protocol.registerSchemesAsPrivileged([
-  { scheme: "local", privileges: { secure: true, standard: true } },
+  { scheme: "renderer", privileges: { secure: true, standard: true } },
 ]);
 
 /**
- * 设置本地请求协议
+ * 设置渲染进程请求协议
  */
-function setupLocalProtocol(): void {
-  protocol.handle("local", async (req) => {
+function setupRendererProtocol(): void {
+  protocol.handle("renderer", async (req) => {
     const { host, pathname } = new URL(req.url);
-    if (host === "renderer") {
-      const targetPath = path.join(rendererDir, pathname);
-      const mainHTMLPath = path.join(
-        rendererDir,
-        `${process.env.MAIN_WINDOW_NAME}/index.html`
-      );
+    const targetPath = path.join(rendererDir, pathname);
+    const mainHTMLPath = path.join(rendererDir, `${host}/index.html`);
 
-      try {
-        const stat = await fs.stat(targetPath);
-        if (stat.isFile()) {
-          return net.fetch(pathToFileURL(targetPath).toString());
-        } else {
-          return net.fetch(pathToFileURL(mainHTMLPath).toString());
-        }
-      } catch {
+    try {
+      const stat = await fs.stat(targetPath);
+      if (stat.isFile()) {
+        return net.fetch(pathToFileURL(targetPath).toString());
+      } else {
         return net.fetch(pathToFileURL(mainHTMLPath).toString());
       }
+    } catch {
+      return net.fetch(pathToFileURL(mainHTMLPath).toString());
     }
   });
 }
@@ -43,20 +38,28 @@ function setupLocalProtocol(): void {
 function createMainWindow(): void {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    width: 1200,
+    height: 900,
+    titleBarStyle: "hidden", // 原生标题栏
+    titleBarOverlay: {
+      color: "#fff",
+      height: 35,
+    }, // 原生标题栏控制器样式
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      webSecurity: true, // 安全网络 (禁止跨域)
+      devTools: process.env.NODE_ENV === "development", // 是否启用 DevTools
     },
   });
 
-  // and load the index.html of the app.
-  // mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
-  mainWindow.loadURL(`local://renderer/`);
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (process.env.NODE_ENV === "development") {
+    // and load the index.html of the app.
+    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools();
+  } else {
+    mainWindow.loadURL(`renderer://${process.env.MAIN_WINDOW_NAME}/`);
+  }
 }
 
 /**
@@ -75,7 +78,7 @@ export function initMainWindow(): void {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on("ready", () => {
-    setupLocalProtocol();
+    setupRendererProtocol();
     createMainWindow();
   });
 
