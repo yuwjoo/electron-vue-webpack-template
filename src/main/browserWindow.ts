@@ -3,31 +3,35 @@ import path from "path";
 import { pathToFileURL } from "url";
 import fs from "fs/promises";
 
+const rendererHost = "0.0.0.0:8888"; // 渲染进程访问Host
 const rendererDir = path.resolve(__dirname, "..", "renderer"); // 渲染进程目录
+
 let mainWindow: BrowserWindow | null = null; // 主窗口对象
 
-protocol.registerSchemesAsPrivileged([
-  { scheme: "renderer", privileges: { secure: true, standard: true } },
-]);
-
 /**
- * 设置渲染进程请求协议
+ * 处理渲染进程请求协议
  */
-function setupRendererProtocol(): void {
-  protocol.handle("renderer", async (req) => {
+function handleRendererProtocol(): void {
+  protocol.handle("https", async (req) => {
     const { host, pathname } = new URL(req.url);
-    const targetPath = path.join(rendererDir, pathname);
-    const mainHTMLPath = path.join(rendererDir, `${host}/index.html`);
 
-    try {
-      const stat = await fs.stat(targetPath);
-      if (stat.isFile()) {
-        return net.fetch(pathToFileURL(targetPath).toString());
-      } else {
-        return net.fetch(pathToFileURL(mainHTMLPath).toString());
+    if (host === rendererHost) {
+      const targetPath = path.join(rendererDir, pathname);
+      const indexPath = path.join(process.env.MAIN_WINDOW_NAME, "index.html");
+      const rollbackPath = path.join(rendererDir, indexPath);
+
+      let fetchUrl = "";
+      try {
+        if ((await fs.stat(targetPath)).isFile()) {
+          fetchUrl = pathToFileURL(targetPath).toString();
+        } else {
+          fetchUrl = pathToFileURL(rollbackPath).toString();
+        }
+      } catch {
+        fetchUrl = pathToFileURL(rollbackPath).toString();
       }
-    } catch {
-      return net.fetch(pathToFileURL(mainHTMLPath).toString());
+
+      return net.fetch(fetchUrl);
     }
   });
 }
@@ -52,13 +56,12 @@ function createMainWindow(): void {
     },
   });
 
+  mainWindow.loadURL(
+    `https://${rendererHost}/${process.env.FRAME_WINDOW_NAME}/index.html?target=https://${rendererHost}/`
+  );
+
   if (process.env.NODE_ENV === "development") {
-    // and load the index.html of the app.
-    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-    // Open the DevTools.
     mainWindow.webContents.openDevTools();
-  } else {
-    mainWindow.loadURL(`renderer://${process.env.MAIN_WINDOW_NAME}/`);
   }
 }
 
@@ -78,7 +81,7 @@ export function initMainWindow(): void {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on("ready", () => {
-    setupRendererProtocol();
+    handleRendererProtocol();
     createMainWindow();
   });
 

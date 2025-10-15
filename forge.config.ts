@@ -35,13 +35,21 @@ const config: ForgeConfig = {
         entryPoints: [
           {
             name: env.MAIN_WINDOW_NAME,
-            html: "./src/index.html",
-            js: "./src/renderer.ts",
+            html: "./src/renderer/index.html",
+            js: "./src/renderer/main.ts",
             preload: {
-              js: "./src/preload.ts",
+              js: "./src/renderer/preload.ts",
             },
           },
+          {
+            name: env.FRAME_WINDOW_NAME,
+            html: "./src/rendererFrame/index.html",
+            js: "./src/rendererFrame/main.ts",
+          },
         ],
+      },
+      devServer: {
+        host: "localhost",
       },
     }),
     // Fuses are used to enable/disable various Electron functionality
