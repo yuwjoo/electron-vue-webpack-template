@@ -1,4 +1,4 @@
-import { app, BrowserWindow, protocol, net } from "electron";
+import { app, BrowserWindow, net, session } from "electron";
 import path from "path";
 import { pathToFileURL } from "url";
 import fs from "fs/promises";
@@ -6,33 +6,37 @@ import fs from "fs/promises";
 const rendererHost = "0.0.0.0:8888"; // 渲染进程访问Host
 const rendererDir = path.resolve(__dirname, "..", "renderer"); // 渲染进程目录
 
+const partition = "persist:main";
+
 let mainWindow: BrowserWindow | null = null; // 主窗口对象
 
 /**
- * 处理渲染进程请求协议
+ * 创建自定义 session
  */
-function handleRendererProtocol(): void {
-  protocol.handle("https", async (req) => {
+function createSession(): void {
+  const ses = session.fromPartition(partition);
+
+  ses.protocol.handle("https", async (req) => {
     const { host, pathname } = new URL(req.url);
 
-    if (host === rendererHost) {
-      const targetPath = path.join(rendererDir, pathname);
-      const indexPath = path.join(process.env.MAIN_WINDOW_NAME, "index.html");
-      const rollbackPath = path.join(rendererDir, indexPath);
+    if (host !== rendererHost) return net.fetch(req);
 
-      let fetchUrl = "";
-      try {
-        if ((await fs.stat(targetPath)).isFile()) {
-          fetchUrl = pathToFileURL(targetPath).toString();
-        } else {
-          fetchUrl = pathToFileURL(rollbackPath).toString();
-        }
-      } catch {
+    const targetPath = path.join(rendererDir, pathname);
+    const indexPath = path.join(process.env.MAIN_WINDOW_NAME, "index.html");
+    const rollbackPath = path.join(rendererDir, indexPath);
+
+    let fetchUrl = "";
+    try {
+      if ((await fs.stat(targetPath)).isFile()) {
+        fetchUrl = pathToFileURL(targetPath).toString();
+      } else {
         fetchUrl = pathToFileURL(rollbackPath).toString();
       }
-
-      return net.fetch(fetchUrl);
+    } catch {
+      fetchUrl = pathToFileURL(rollbackPath).toString();
     }
+
+    return net.fetch(fetchUrl);
   });
 }
 
@@ -53,6 +57,7 @@ function createMainWindow(): void {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       webSecurity: true, // 安全网络 (禁止跨域)
       devTools: process.env.NODE_ENV === "development", // 是否启用 DevTools
+      partition,
     },
   });
 
@@ -81,7 +86,7 @@ export function initMainWindow(): void {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on("ready", () => {
-    handleRendererProtocol();
+    createSession();
     createMainWindow();
   });
 
