@@ -1,5 +1,5 @@
 import { app } from "electron";
-import { initMainWindow } from "./browserWindow";
+import { initMainWindow } from "./mainWindow";
 import { createMainSession } from "./mainSession";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.

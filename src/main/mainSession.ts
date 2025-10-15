@@ -2,7 +2,7 @@ import { app, net, session } from "electron";
 import path from "path";
 import { pathToFileURL } from "url";
 import fs from "fs/promises";
-import { mainWebHost } from "./browserWindow";
+import { mainWebHost } from "./mainWindow";
 
 const rendererRoot = path.resolve(__dirname, "..", "renderer"); // 渲染进程根目录
 const partition = "persist:main"; // 主 session partition
