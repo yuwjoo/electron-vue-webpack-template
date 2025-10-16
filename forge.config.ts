@@ -43,8 +43,8 @@ const config: ForgeConfig = {
           },
           {
             name: env.FRAME_WINDOW_NAME,
-            html: "./src/rendererFrame/index.html",
-            js: "./src/rendererFrame/main.ts",
+            html: "./src/renderer/pages/frame/index.html",
+            js: "./src/renderer/pages/frame/main.ts",
           },
         ],
       },
