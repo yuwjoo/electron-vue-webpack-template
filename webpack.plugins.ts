@@ -10,5 +10,8 @@ export const plugins: Required<Configuration>["plugins"] = [
   new ForkTsCheckerWebpackPlugin({
     logger: "webpack-infrastructure",
   }),
-  new Dotenv(),
+  new Dotenv({
+    path: `./.env.${process.env.NODE_ENV || "production"}`,
+    defaults: "./.env",
+  }),
 ];
