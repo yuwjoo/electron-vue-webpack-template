@@ -5,11 +5,12 @@
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
-    "start": "chcp 65001 && electron-forge start",
+    "start": "chcp 65001 && cross-env NODE_ENV=development electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "devtools": "cross-env PORT=8090 vue-devtools"
   },
   "keywords": [],
   "author": {
@@ -32,7 +33,9 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
+    "@vue/devtools": "^8.0.2",
     "copy-webpack-plugin": "^13.0.1",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.11.0",
     "dotenv": "^17.2.3",
     "dotenv-webpack": "^8.1.1",
