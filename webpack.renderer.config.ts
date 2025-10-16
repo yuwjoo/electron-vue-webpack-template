@@ -6,6 +6,9 @@ import path from "path";
 import { VueLoaderPlugin } from "vue-loader";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CopyPlugin from "copy-webpack-plugin";
+import AutoImport from "unplugin-auto-import/webpack";
+import Components from "unplugin-vue-components/webpack";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
 export const rendererConfig: Configuration = {
   module: {
@@ -57,6 +60,14 @@ export const rendererConfig: Configuration = {
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
       __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
+    }),
+    AutoImport({
+      resolvers: [ElementPlusResolver()],
+      dts: "./src/common/types/autoImports.d.ts",
+    }),
+    Components({
+      resolvers: [ElementPlusResolver()],
+      dts: "./src/common/types/components.d.ts",
     }),
   ],
   resolve: {

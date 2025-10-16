@@ -1,6 +1,9 @@
 <template>
   <header>
-    234234
+    23423423
+    <el-button>I am ElButton</el-button>
+    <el-button type="primary">I am ElButton</el-button>
+    <el-tag type="primary">Tag 1</el-tag>
     <img
       alt="Vue logo"
       class="logo"
@@ -20,7 +23,12 @@
   <RouterView />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+ElMessage({
+  message: "I am ElMessage",
+  type: "success",
+});
+</script>
 
 <style lang="scss" scoped>
 header {
