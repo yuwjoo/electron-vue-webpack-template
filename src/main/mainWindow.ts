@@ -14,7 +14,7 @@ function createMainWindow(): void {
     height: 900,
     titleBarStyle: "hidden", // 原生标题栏
     titleBarOverlay: {
-      color: "#fff",
+      color: "rgba(0, 0, 0, 0)",
       height: 35,
     }, // 原生标题栏控制器样式
     webPreferences: {
