@@ -8,7 +8,7 @@
     <img
       alt="Vue logo"
       class="logo"
-      src="@/renderer/assets/logo.svg"
+      src="@/renderer/assets/icons/logo.svg"
       width="125"
       height="125"
     />

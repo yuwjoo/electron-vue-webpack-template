@@ -10,7 +10,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     ElButton: typeof import('element-plus/es')['ElButton']
     ElTag: typeof import('element-plus/es')['ElTag']
+    IIconsLogo: typeof import('~icons/icons/logo')['default']
     'ITabler:accessPoint': typeof import('~icons/tabler/access-point')['default']
+    'ITabler:refresh': typeof import('~icons/tabler/refresh')['default']
     ITablerAccessPoint: typeof import('~icons/tabler/access-point')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
