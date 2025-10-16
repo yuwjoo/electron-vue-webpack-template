@@ -7,4 +7,6 @@
 export {}
 declare global {
   const ElMessage: typeof import('element-plus/es').ElMessage
+  const ITablerAccessPoint: typeof import('~icons/tabler/access-point').default
+  const iTablerAccessPoint: typeof import('~icons/tabler/access-point').default
 }

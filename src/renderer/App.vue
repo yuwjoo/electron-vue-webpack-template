@@ -4,6 +4,7 @@
     <el-button>I am ElButton</el-button>
     <el-button type="primary">I am ElButton</el-button>
     <el-tag type="primary">Tag 1</el-tag>
+    <i-tabler:access-point />
     <img
       alt="Vue logo"
       class="logo"

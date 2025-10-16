@@ -9,6 +9,9 @@ import CopyPlugin from "copy-webpack-plugin";
 import AutoImport from "unplugin-auto-import/webpack";
 import Components from "unplugin-vue-components/webpack";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+import IconsResolver from "unplugin-icons/resolver";
+import Icons from "unplugin-icons/webpack";
+import { FileSystemIconLoader } from "unplugin-icons/loaders";
 
 export const rendererConfig: Configuration = {
   module: {
@@ -62,12 +65,34 @@ export const rendererConfig: Configuration = {
       __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
     }),
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver(), IconsResolver()],
       dts: "./src/common/types/autoImports.d.ts",
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [
+        ElementPlusResolver(),
+        IconsResolver({
+          prefix: "i",
+          enabledCollections: ["ep", "tabler"],
+          customCollections: ["icons"],
+        }),
+      ],
       dts: "./src/common/types/components.d.ts",
+    }),
+    Icons({
+      customCollections: {
+        icons: FileSystemIconLoader("./src/renderer/assets/icons", (svg) =>
+          svg.replace(
+            /^<svg /,
+            '<svg fill="currentColor" width="1em" height="1em" '
+          )
+        ),
+      },
+      iconCustomizer(_collection, _icon, props) {
+        props.width = "1em";
+        props.height = "1em";
+      },
+      autoInstall: true,
     }),
   ],
   resolve: {
