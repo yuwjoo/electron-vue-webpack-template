@@ -6,8 +6,8 @@
   "main": ".webpack/main",
   "scripts": {
     "start": "chcp 65001 && cross-env NODE_ENV=development electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
+    "package": "cross-env NODE_ENV=production electron-forge package",
+    "make": "cross-env NODE_ENV=production electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "devtools": "cross-env PORT=8090 vue-devtools",

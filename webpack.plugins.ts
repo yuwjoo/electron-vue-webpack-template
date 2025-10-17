@@ -11,7 +11,7 @@ export const plugins: Required<Configuration>["plugins"] = [
     logger: "webpack-infrastructure",
   }),
   new Dotenv({
-    path: `./.env.${process.env.NODE_ENV || "production"}`,
+    path: `./.env.${process.env.NODE_ENV}`,
     defaults: "./.env",
   }),
 ];
