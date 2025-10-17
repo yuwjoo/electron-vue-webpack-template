@@ -10,7 +10,8 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "devtools": "cross-env PORT=8090 vue-devtools"
+    "devtools": "cross-env PORT=8090 vue-devtools",
+    "debug:main": "npm run start -- --inspect-brk-electron"
   },
   "keywords": [],
   "author": {
