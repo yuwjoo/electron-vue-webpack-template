@@ -12,6 +12,7 @@ import fs from "fs";
 
 import { mainConfig } from "./webpack.main.config";
 import { rendererConfig } from "./webpack.renderer.config";
+import VueDevtoolsPlugin from "./builder/electronForgePlugins/vueDevtoolsPlugin";
 
 const env = dotenv.parse(fs.readFileSync("./.env"));
 
@@ -28,6 +29,7 @@ const config: ForgeConfig = {
   ],
   plugins: [
     new AutoUnpackNativesPlugin({}),
+    new VueDevtoolsPlugin(),
     new WebpackPlugin({
       mainConfig,
       renderer: {
