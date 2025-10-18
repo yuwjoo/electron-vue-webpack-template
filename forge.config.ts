@@ -7,14 +7,11 @@ import { AutoUnpackNativesPlugin } from "@electron-forge/plugin-auto-unpack-nati
 import { WebpackPlugin } from "@electron-forge/plugin-webpack";
 import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
-import dotenv from "dotenv";
-import fs from "fs";
 
 import { mainConfig } from "./webpack.main.config";
 import { rendererConfig } from "./webpack.renderer.config";
 import VueDevtoolsPlugin from "./builder/electronForgePlugins/vueDevtoolsPlugin";
-
-const env = dotenv.parse(fs.readFileSync("./.env"));
+import { getEnv } from "./builder/utils/env";
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -29,14 +26,16 @@ const config: ForgeConfig = {
   ],
   plugins: [
     new AutoUnpackNativesPlugin({}),
-    new VueDevtoolsPlugin(),
+    new VueDevtoolsPlugin({
+      port: getEnv().VUE_DEVTOOLS_PORT as unknown as number,
+    }),
     new WebpackPlugin({
       mainConfig,
       renderer: {
         config: rendererConfig,
         entryPoints: [
           {
-            name: env.MAIN_WINDOW_NAME,
+            name: getEnv().MAIN_WINDOW_NAME!,
             html: "./src/renderer/index.html",
             js: "./src/renderer/main.ts",
             preload: {
@@ -44,7 +43,7 @@ const config: ForgeConfig = {
             },
           },
           {
-            name: env.FRAME_WINDOW_NAME,
+            name: getEnv().FRAME_WINDOW_NAME!,
             html: "./src/renderer/pages/frame/index.html",
             js: "./src/renderer/pages/frame/main.ts",
           },

@@ -8,7 +8,10 @@ import router from "./router";
 import { devtools } from "@vue/devtools";
 
 if (process.env.NODE_ENV === "development") {
-  devtools.connect("http://localhost", 8090);
+  devtools.connect(
+    "http://localhost",
+    Number(process.env.VUE_DEVTOOLS_PORT) || undefined
+  );
 }
 
 const app = createApp(App);
