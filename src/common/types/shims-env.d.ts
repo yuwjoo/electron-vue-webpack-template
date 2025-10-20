@@ -4,5 +4,6 @@ declare namespace NodeJS {
     MAIN_WINDOW_NAME: string; // 主窗口名称
     FRAME_WINDOW_NAME: string; // 框架窗口名称
     VUE_DEVTOOLS_PORT: string; // Vue Devtools 端口
+    DATABASE_NAME: string; // 数据库名称
   }
 }

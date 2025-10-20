@@ -1,12 +1,14 @@
 import { app } from "electron";
 import { initMainWindow } from "./mainWindow";
 import { createMainSession } from "./mainSession";
+import { initDatabase } from "./database";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
+initDatabase(); // 初始化数据库
 createMainSession(); // 创建 main session
 initMainWindow(); // 初始化主窗口
 

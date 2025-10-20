@@ -12,6 +12,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "paths": {
       "@/*": [
         "src/*"
