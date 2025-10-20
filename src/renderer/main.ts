@@ -6,8 +6,9 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 import { devtools } from "@vue/devtools";
+import { isDev } from "@/common/utils/env";
 
-if (process.env.NODE_ENV === "development") {
+if (isDev()) {
   devtools.connect(
     "http://localhost",
     Number(process.env.VUE_DEVTOOLS_PORT) || undefined
@@ -20,3 +21,6 @@ app.use(createPinia());
 app.use(router);
 
 app.mount("#app");
+
+console.log("aaaa", (window as any).electronApi);
+console.log("bbb", (window as any).electronApi.store.get("isElectron"));

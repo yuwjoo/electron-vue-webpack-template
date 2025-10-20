@@ -3,10 +3,11 @@ import { DataSource } from "typeorm";
 import { Photo } from "./entitys/photo";
 import { app } from "electron";
 import path from "path";
+import { isDev } from "@/common/utils/env";
 
 let databasePath: string;
 
-if (process.env.NODE_ENV === "development") {
+if (isDev()) {
   databasePath = process.env.DATABASE_NAME;
 } else {
   databasePath = path.join(app.getPath("userData"), process.env.DATABASE_NAME);

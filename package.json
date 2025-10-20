@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^11.0.2",
     "element-plus": "^2.11.4",
     "pinia": "^3.0.3",
     "reflect-metadata": "^0.2.2",
