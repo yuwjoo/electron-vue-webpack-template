@@ -1,3 +1,1 @@
-export interface StoreType {
-  isElectron: boolean;
-}
+export interface StoreType {}

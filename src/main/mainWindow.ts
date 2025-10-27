@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import { getMainSessionPartition } from "./mainSession";
+import { isDev } from "@/common/utils/env";
 
 export const mainWebHost = "0.0.0.0:8888"; // 主渲染页面Host
 
@@ -20,7 +21,7 @@ function createMainWindow(): void {
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       webSecurity: true, // 安全网络 (禁止跨域)
-      devTools: process.env.NODE_ENV === "development", // 是否启用 DevTools
+      devTools: isDev(), // 是否启用 DevTools
       partition: getMainSessionPartition(),
     },
   });
@@ -29,7 +30,7 @@ function createMainWindow(): void {
     `https://${mainWebHost}/${process.env.FRAME_WINDOW_NAME}/index.html?target=https://${mainWebHost}/`
   );
 
-  if (process.env.NODE_ENV === "development") {
+  if (isDev()) {
     mainWindow.webContents.openDevTools();
   }
 }

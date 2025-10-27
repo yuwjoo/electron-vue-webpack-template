@@ -10,17 +10,15 @@ let store: Store<StoreType>;
  */
 export function initStore(): void {
   store = new Store<StoreType>({
-    defaults: {
-      isElectron: true,
-    },
+    defaults: {},
   });
 
-  ipcMain.on(SET_STORE, (_event, key, value) => {
+  ipcMain.handle(SET_STORE, (_event, key, value) => {
     store.set(key, value);
   });
 
-  ipcMain.on(GET_STORE, (event, key) => {
-    event.returnValue = store.get(key);
+  ipcMain.handle(GET_STORE, (_event, key) => {
+    return store.get(key);
   });
 }
 

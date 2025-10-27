@@ -1,19 +1,25 @@
 <template>
   <div class="frame-titlebar">
     <i-icons-logo
-      v-if="isDev"
+      v-if="isDev()"
       class="frame-titlebar__logo"
       @click="handleReload"
     />
   </div>
-  <iframe class="frame-iframe" :src="target" />
+  <iframe ref="iframeRef" class="frame-iframe" :src="target" />
 </template>
 
 <script setup lang="ts" name="FrameView">
-const isDev = process.env.NODE_ENV === "development";
+import { onMounted, useTemplateRef } from "vue";
+import { isDev } from "@/common/utils/env";
 
 const query = new URLSearchParams(window.location.search);
 const target = query.get("target"); // web页面地址
+const iframeRef = useTemplateRef("iframeRef");
+
+onMounted(() => {
+  iframeRef.value.contentWindow.electronApi = window.electronApi;
+});
 
 /**
  * 刷新页面

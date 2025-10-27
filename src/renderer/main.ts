@@ -21,6 +21,3 @@ app.use(createPinia());
 app.use(router);
 
 app.mount("#app");
-
-console.log("aaaa", (window as any).electronApi);
-console.log("bbb", (window as any).electronApi.store.get("isElectron"));
